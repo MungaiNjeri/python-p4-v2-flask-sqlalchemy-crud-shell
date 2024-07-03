@@ -2,8 +2,10 @@
 
 from flask import Flask
 from flask_migrate import Migrate
+from models import db, Pet
 
-from models import db
+
+
 
 # create a Flask application instance 
 app = Flask(__name__)
@@ -19,6 +21,32 @@ migrate = Migrate(app, db)
 
 # initialize the Flask application to use the database
 db.init_app(app)
+
+# create a new pet in the database
+pet1 = Pet(name="Fido", species="Dog")
+db.session.add(pet1)
+db.session.commit()
+
+# retrieve all pets from the database
+pets = Pet.query.all()
+
+Pet.query.filter(Pet.species == 'Cat').all()
+Pet.query.filter_by(id=1).first()
+
+#update and commit
+pet1.name = "Fido the mighty"
+db.session.commit()
+
+# delete and commit
+db.session.delete(pet1)
+db.session.commit()
+
+#delete all rows
+Pet.query.delete()
+db.session.commit()
+
+#exit
+exit()
 
 
 if __name__ == '__main__':
